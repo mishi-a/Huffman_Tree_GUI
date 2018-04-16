@@ -1,11 +1,9 @@
 import java.util.HashMap;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -13,17 +11,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window; 
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-public class DisplaySimpleTree extends Application {
+public class DisplaySimpleTree extends Application 
+{
 
 	Canvas canvas = null;
 	public static int gap = 100;
 	public static int vGap = 50;
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception 
+    {
         primaryStage.setTitle("Huffman Encoder Decoder");
         GridPane gridPane = createDisplayTreePane();
         Scene scene = new Scene(gridPane, 1366, 768);
@@ -111,9 +110,8 @@ public class DisplaySimpleTree extends Application {
         submitButton.setOnAction(new EventHandler<ActionEvent>() 
         {
 
-			public void handle(ActionEvent arg0)
+        	public void handle(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				if(nameField.getText().isEmpty())
 				{
 					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error!", "Please enter String");
@@ -122,45 +120,42 @@ public class DisplaySimpleTree extends Application {
 				else 
 				{
 					String input = nameField.getText();
-					HashMap<Character, String> map = Huffman.findHuffman(input.toLowerCase());
+					HuffmanTree tree = new HuffmanTree(input);
+					HashMap<Character, String> map = tree.getHuffmanEncoding();
 					System.out.println(map);
-					int ht = Huffman.findHeight(Huffman.root);
+					int ht = tree.getHeight();
 					String disp = "";
-					input = input.toLowerCase();
+					//input = input.toLowerCase();
 					for(int i=0;i<input.length();i++)
-					{
 						disp = disp + map.get(input.charAt(i));
-						//System.out.println(input.charAt(i)+" " + disp);
-					}
 					outPut.setText(input+" is encoded as "+disp);
 					GraphicsContext gc = canvas.getGraphicsContext2D();
 					gc.clearRect(0,0,1500,1500);
 					gc.setStroke(Color.BLUE);
 					gc.setFont(new Font("Arial",20));
 					double begin = gap*(ht-2);
-					display(Huffman.root,750,5,gc,begin);
+					display(tree.root,750,5,gc,begin);
 				}
 			}
 		});
         
      }
     	
-    public void drawCircle(HuffmanNode root,double x,double y,GraphicsContext gc)
+    public void drawCircle(HuffmanTreeNode root,double x,double y,GraphicsContext gc)
     {
     	gc.strokeOval(x, y, 52, 52);
-   		if(root.c<260)
+   		if(root.character < 260)
    		{
-   			gc.fillText(Integer.toString(root.data),x+10, y+26,10);
-   			gc.fillText("("+root.c+")",x+30 , y+26,18);
+   			gc.fillText(Integer.toString(root.frequency),x+10, y+26,10);
+   			gc.fillText("("+root.character+")",x+30 , y+26,18);
    		}
    		else
-   			gc.fillText(Integer.toString(root.data),x+20, y+26,10);
+   			gc.fillText(Integer.toString(root.frequency),x+20, y+26,10);
     }
-    protected void display(HuffmanNode root,double x,double y,GraphicsContext gc,double g)
+    protected void display(HuffmanTreeNode root,double x,double y,GraphicsContext gc,double g)
     {
-		// TODO Auto-generated method stub
-    	drawCircle(root,x,y,gc);
-    	if(root.left!=null)
+		drawCircle(root,x,y,gc);
+    	if(root.nodeToLeft!=null)
     	{
     		double x0 = x+26;
     		double y0 = y+52;
@@ -168,9 +163,9 @@ public class DisplaySimpleTree extends Application {
     		double y1 = y0+vGap;
     		gc.strokeLine(x0,y0,x1,y1);
     		gc.fillText("0", (x0+x1)/2-5, (y1+y0)/2);
-    		display(root.left,x1-26,y1,gc,g/2);
+    		display(root.nodeToLeft,x1-26,y1,gc,g/2);
     	}
-    	if(root.right!=null)
+    	if(root.nodeToRight!=null)
     	{
 //    		gc.strokeLine(x+26, y+52, x+102, y+100);
 //    		display(root.right,x+76,y+100,gc);
@@ -181,7 +176,7 @@ public class DisplaySimpleTree extends Application {
     		gc.strokeLine(x0,y0,x1,y1);
     		gc.fillText("1", (x1+x0)/2-5, (y1+y0)/2);
     		//display(root.left,x-76,y+100,gc);
-    		display(root.right,x1-26,y1,gc,g/2);
+    		display(root.nodeToRight,x1-26,y1,gc,g/2);
     	}
 		
 	}

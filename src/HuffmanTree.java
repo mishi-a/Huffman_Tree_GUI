@@ -134,18 +134,24 @@ class HuffmanTreeDecoder
 			{
 				decoded += current.character;
 				current = tree.root;
+				i--;
 			}
 			else
-			{
-				// invalid sequence condition
-				if(i == len - 1)
-					return null;
-				
+			{	
 				// if encoding is zero go left else go right
 				if(toDecode.charAt(i) == '0')
 					current = current.nodeToLeft;
 				else
 					current = current.nodeToRight;
+				
+				// invalid sequence condition
+				if(i == len - 1)
+				{
+					if(current.nodeToLeft == null && current.nodeToRight == null)
+						return (decoded + current.character);
+					else
+						return null;
+				}
 			}
 		}
 		

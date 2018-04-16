@@ -41,11 +41,11 @@ public class DisplaySimpleTree extends Application
         // Set the vertical gap between rows
         gridPane.setVgap(8);
         
-        addUIControls(gridPane);
-        //gridPane.setGridLinesVisible(true);
-        
         FlowPane fp = new FlowPane();
         canvas = new Canvas(1500,1500);
+        
+        addUIControls(gridPane);
+        //gridPane.setGridLinesVisible(true);
         
    
         fp.getChildren().add(canvas);
@@ -107,41 +107,79 @@ public class DisplaySimpleTree extends Application
         submitButton1.setPrefWidth(150);
         gridPane.add(submitButton1, 3, 2);
    
-        submitButton.setOnAction(new EventHandler<ActionEvent>() 
-        {
-
-        	public void handle(ActionEvent arg0)
-			{
-				if(nameField.getText().isEmpty())
-				{
-					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error!", "Please enter String");
-				    return;
-				}
-				else 
-				{
-					String input = nameField.getText();
-					HuffmanTree tree = new HuffmanTree(input);
-					HashMap<Character, String> map = tree.getHuffmanEncoding();
-					System.out.println(map);
-					int ht = tree.getHeight();
-					String disp = "";
-					//input = input.toLowerCase();
-					for(int i=0;i<input.length();i++)
-						disp = disp + map.get(input.charAt(i));
-					outPut.setText(input+" is encoded as "+disp);
-					GraphicsContext gc = canvas.getGraphicsContext2D();
-					gc.clearRect(0,0,1500,1500);
-					gc.setStroke(Color.BLUE);
-					gc.setFont(new Font("Arial",20));
-					double begin = gap*(ht-2);
-					display(tree.root,750,5,gc,begin);
-				}
-			}
-		});
+        MyEventHandler handler = new MyEventHandler(nameField, gridPane, outPut, canvas, gap, vGap, submitButton1, encodedString);
+        submitButton.setOnAction(handler);
         
      }
     	
-    public void drawCircle(HuffmanTreeNode root,double x,double y,GraphicsContext gc)
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+class MyEventHandler implements EventHandler<ActionEvent>
+{
+	TextField nameField, output, es;
+	GridPane gridPane;
+	Canvas canvas;
+	static int gap, vGap;
+	HuffmanTree tree;
+	Button sb1;
+	public MyEventHandler(TextField nameField, GridPane gridPane, TextField output, Canvas canvas, int gap, int vGap,
+			Button sb1, TextField es)
+	{
+		this.nameField = nameField;
+		this.gridPane = gridPane;
+		this.output = output;
+		this.canvas = canvas;
+		MyEventHandler.gap = gap;
+		MyEventHandler.vGap = vGap;
+		this.sb1 = sb1;
+		this.es = es;
+	}
+	
+	public void handle(ActionEvent arg0)
+	{
+		if(nameField.getText().isEmpty())
+		{
+			showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error!", "Please enter String");
+		    return;
+		}
+		else 
+		{
+			String input = nameField.getText();
+			tree = new HuffmanTree(input);
+			HashMap<Character, String> map = tree.getHuffmanEncoding();
+			System.out.println(map);
+			int ht = tree.getHeight();
+			String disp = "";
+			//input = input.toLowerCase();
+			for(int i=0;i<input.length();i++)
+				disp = disp + map.get(input.charAt(i));
+			output.setText(input+" is encoded as "+disp);
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			gc.clearRect(0,0,1500,1500);
+			gc.setStroke(Color.BLUE);
+			gc.setFont(new Font("Arial",20));
+			double begin = gap*(ht-2);
+			display(tree.root,750,5,gc,begin);
+			
+			sb1.setOnAction(new MyEventHandler2(es, gridPane, output, tree));
+		}
+	}
+	
+	public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
+    }
+	
+    public static void drawCircle(HuffmanTreeNode root,double x,double y,GraphicsContext gc)
     {
     	gc.strokeOval(x, y, 52, 52);
    		if(root.character < 260)
@@ -152,7 +190,7 @@ public class DisplaySimpleTree extends Application
    		else
    			gc.fillText(Integer.toString(root.frequency),x+20, y+26,10);
     }
-    protected void display(HuffmanTreeNode root,double x,double y,GraphicsContext gc,double g)
+    protected static void display(HuffmanTreeNode root,double x,double y,GraphicsContext gc,double g)
     {
 		drawCircle(root,x,y,gc);
     	if(root.nodeToLeft!=null)
@@ -180,18 +218,44 @@ public class DisplaySimpleTree extends Application
     	}
 		
 	}
-    
+}
 
-	private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+class MyEventHandler2 implements EventHandler<ActionEvent>
+{
+	TextField nameField, output;
+	GridPane gridPane;
+	HuffmanTree tree;
+	public MyEventHandler2(TextField nameField, GridPane gridPane, TextField output, HuffmanTree tree)
+	{
+		this.nameField = nameField;
+		this.gridPane = gridPane;
+		this.output = output;
+		this.tree = tree;
+	}
+	
+	public void handle(ActionEvent arg0)
+	{
+		if(nameField.getText().isEmpty())
+		{
+			showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error!", "Please enter Encoded String");
+		    return;
+		}
+		else 
+		{
+			String input = nameField.getText();
+			HuffmanTreeDecoder decoder = new HuffmanTreeDecoder(tree, input);
+			String disp = decoder.decode();
+			output.setText(input+" is decoded as "+disp);
+		}
+	}
+	
+	public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message)
+	{
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(owner);
         alert.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

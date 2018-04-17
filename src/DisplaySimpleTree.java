@@ -18,7 +18,7 @@ public class DisplaySimpleTree extends Application
 {
 
 	Canvas canvas = null;
-	public static int gap = 100;
+	public static int gap = 30;
 	public static int vGap = 50;
     @Override
     public void start(Stage primaryStage) throws Exception 
@@ -42,7 +42,7 @@ public class DisplaySimpleTree extends Application
         gridPane.setVgap(8);
         
         FlowPane fp = new FlowPane();
-        canvas = new Canvas(1500,1500);
+        canvas = new Canvas(3000,3000);
         
         addUIControls(gridPane);
         //gridPane.setGridLinesVisible(true);
@@ -53,7 +53,8 @@ public class DisplaySimpleTree extends Application
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(fp);
         scrollPane.setPannable(true);
-        
+        scrollPane.setFitToHeight(true);
+		scrollPane.setFitToWidth(true);
         gridPane.add(scrollPane, 0,4,4,1);
         return gridPane;
     }
@@ -161,10 +162,10 @@ class MyEventHandler implements EventHandler<ActionEvent>
 				disp = disp + map.get(input.charAt(i));
 			output.setText(input+" is encoded as "+disp);
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			gc.clearRect(0,0,1500,1500);
+			gc.clearRect(0,0,3000,3000);
 			gc.setStroke(Color.BLUE);
 			gc.setFont(new Font("Arial",20));
-			double begin = gap*(ht-2);
+			double begin = gap*Math.pow(2,(ht-2));
 			display(tree.root,700,5,gc,begin);
 			
 			sb1.setOnAction(new MyEventHandler2(es, gridPane, output, tree));
@@ -208,7 +209,7 @@ class MyEventHandler implements EventHandler<ActionEvent>
     		double x1 = x0-g;
     		double y1 = y0+vGap;
     		gc.strokeLine(x0,y0,x1,y1);
-    		gc.fillText("0", (x0+x1)/2-5, (y1+y0)/2);
+    		gc.fillText("0", (x0+x1)/2-7, (y1+y0)/2);
     		display(root.nodeToLeft,x1-26,y1,gc,g/2);
     	}
     	if(root.nodeToRight!=null)

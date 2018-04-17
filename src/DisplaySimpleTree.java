@@ -49,6 +49,7 @@ public class DisplaySimpleTree extends Application
         
    
         fp.getChildren().add(canvas);
+        fp.setStyle("-fx-background-color: #29272F");
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(fp);
         scrollPane.setPannable(true);
@@ -164,7 +165,7 @@ class MyEventHandler implements EventHandler<ActionEvent>
 			gc.setStroke(Color.BLUE);
 			gc.setFont(new Font("Arial",20));
 			double begin = gap*(ht-2);
-			display(tree.root,750,5,gc,begin);
+			display(tree.root,700,5,gc,begin);
 			
 			sb1.setOnAction(new MyEventHandler2(es, gridPane, output, tree));
 		}
@@ -181,7 +182,13 @@ class MyEventHandler implements EventHandler<ActionEvent>
 	
     public static void drawCircle(HuffmanTreeNode root,double x,double y,GraphicsContext gc)
     {
+    	gc.setStroke(Color.BLUE);
+    	gc.setLineWidth(5);
     	gc.strokeOval(x, y, 52, 52);
+    	gc.setFill(Color.LIGHTSKYBLUE);
+    	gc.fillOval(x,y,52,52);
+   		gc.setStroke(Color.BLACK);
+   		gc.setFill(Color.BLACK);
    		if(root.character < 260)
    		{
    			gc.fillText(Integer.toString(root.frequency),x+10, y+26,10);
@@ -193,6 +200,7 @@ class MyEventHandler implements EventHandler<ActionEvent>
     protected static void display(HuffmanTreeNode root,double x,double y,GraphicsContext gc,double g)
     {
 		drawCircle(root,x,y,gc);
+		gc.setLineWidth(3);
     	if(root.nodeToLeft!=null)
     	{
     		double x0 = x+26;

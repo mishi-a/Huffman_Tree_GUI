@@ -14,6 +14,7 @@ import javafx.stage.Window;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
 public class DisplaySimpleTree extends Application 
 {
 
@@ -42,7 +43,7 @@ public class DisplaySimpleTree extends Application
         gridPane.setVgap(8);
         
         FlowPane fp = new FlowPane();
-        canvas = new Canvas(3000,3000);
+        canvas = new Canvas(8000,8000);
         
         addUIControls(gridPane);
         //gridPane.setGridLinesVisible(true);

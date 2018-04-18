@@ -49,7 +49,7 @@ public class DisplaySimpleTree extends Application
         
    
         fp.getChildren().add(canvas);
-        fp.setStyle("-fx-background-color: #29272F");
+        fp.setStyle("-fx-background-color: #EE6767");
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(fp);
         scrollPane.setPannable(true);
@@ -166,7 +166,8 @@ class MyEventHandler implements EventHandler<ActionEvent>
 			gc.setStroke(Color.BLUE);
 			gc.setFont(new Font("Arial",20));
 			double begin = gap*Math.pow(2,(ht-2));
-			display(tree.root,700,5,gc,begin);
+			double dim = Math.pow(2,(ht-1))*30;
+			display(tree.root,dim,10,gc,begin);
 			
 			sb1.setOnAction(new MyEventHandler2(es, gridPane, output, tree));
 		}

@@ -50,7 +50,7 @@ public class DisplaySimpleTree extends Application
         
    
         fp.getChildren().add(canvas);
-        fp.setStyle("-fx-background-color: #EE6767");
+        fp.setStyle("-fx-background-color: #EEEEEE");
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(fp);
         scrollPane.setPannable(true);
@@ -81,20 +81,9 @@ public class DisplaySimpleTree extends Application
         nameField.setPrefHeight(40);
         nameField.setPrefWidth(1000);
         gridPane.add(nameField, 2,1);
-
-
-        // Add Email Label
-        Label emailLabel = new Label("Enter a bit string :");
-        GridPane.setHalignment(emailLabel, HPos.LEFT);
-        gridPane.add(emailLabel, 0, 2);
-
-        final TextField encodedString = new TextField();
-        encodedString.setPrefHeight(40);
-        encodedString.setPrefWidth(1000);
-        gridPane.add(encodedString, 2, 2);
         
         final TextField outPut = new TextField();
-        outPut.setPromptText("Output Will be Displayed Here");
+        outPut.setPromptText("Encode a string to decode it further");
         outPut.setPrefHeight(40);
         outPut.setPrefWidth(1000);
         gridPane.add(outPut, 2, 3);
@@ -105,12 +94,8 @@ public class DisplaySimpleTree extends Application
         submitButton.setPrefWidth(150);
         gridPane.add(submitButton, 3, 1);
         
-        Button submitButton1 = new Button("Decode To Text");
-        submitButton1.setPrefHeight(40);
-        submitButton1.setPrefWidth(150);
-        gridPane.add(submitButton1, 3, 2);
-   
-        MyEventHandler handler = new MyEventHandler(nameField, gridPane, outPut, canvas, gap, vGap, submitButton1, encodedString);
+        
+        MyEventHandler handler = new MyEventHandler(nameField, gridPane, outPut, canvas, gap, vGap);
         submitButton.setOnAction(handler);
         
      }
@@ -124,14 +109,12 @@ public class DisplaySimpleTree extends Application
 
 class MyEventHandler implements EventHandler<ActionEvent>
 {
-	TextField nameField, output, es;
+	TextField nameField, output;
 	GridPane gridPane;
 	Canvas canvas;
 	static int gap, vGap;
 	HuffmanTree tree;
-	Button sb1;
-	public MyEventHandler(TextField nameField, GridPane gridPane, TextField output, Canvas canvas, int gap, int vGap,
-			Button sb1, TextField es)
+	public MyEventHandler(TextField nameField, GridPane gridPane, TextField output, Canvas canvas, int gap, int vGap)
 	{
 		this.nameField = nameField;
 		this.gridPane = gridPane;
@@ -139,8 +122,6 @@ class MyEventHandler implements EventHandler<ActionEvent>
 		this.canvas = canvas;
 		MyEventHandler.gap = gap;
 		MyEventHandler.vGap = vGap;
-		this.sb1 = sb1;
-		this.es = es;
 	}
 	
 	public void handle(ActionEvent arg0)
@@ -170,7 +151,22 @@ class MyEventHandler implements EventHandler<ActionEvent>
 			double dim = Math.pow(2,(ht-1))*30;
 			display(tree.root,dim,10,gc,begin);
 			
-			sb1.setOnAction(new MyEventHandler2(es, gridPane, output, tree));
+			// Add Email Label
+	        Label emailLabel = new Label("Enter a bit string :");
+	        GridPane.setHalignment(emailLabel, HPos.LEFT);
+	        gridPane.add(emailLabel, 0, 2);
+
+	        final TextField encodedString = new TextField();
+	        encodedString.setPrefHeight(40);
+	        encodedString.setPrefWidth(1000);
+	        gridPane.add(encodedString, 2, 2);
+			
+			Button submitButton1 = new Button("Decode To Text");
+	        submitButton1.setPrefHeight(40);
+	        submitButton1.setPrefWidth(150);
+	        gridPane.add(submitButton1, 3, 2);
+	   
+			submitButton1.setOnAction(new MyEventHandler2(encodedString, gridPane, output, tree));
 		}
 	}
 	

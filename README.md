@@ -1,9 +1,16 @@
 # Huffman_Tree_GUI
-A Java Project using javaFX
+A Java Project for displaying the Huffman Encoding Tree and decoding a bit string using the same
 
-# usage
-First Compile HuffmanTree.java
-Secondly complie DisplaySimpleTree.java
+# Libraries and Algorithms used
+1) javaFX for visualization
+2) Built-in PriorityQueue for implementing Min Heap(required to build encoding tree)
+
+# Usage
+Firstly, install javaFx libraries in the system.
+Then,
+1) javac HuffmanTree.java
+2) javac DisplaySimpleTree.java
+3) java DisplaySimpleTree
 Now you can see the GUI
 
 # What is Huffman Coding

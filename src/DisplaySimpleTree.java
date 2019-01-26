@@ -24,6 +24,7 @@ public class DisplaySimpleTree extends Application
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
+        //Starting point of APplication
         primaryStage.setTitle("Huffman Encoder Decoder");
         GridPane gridPane = createDisplayTreePane();
         Scene scene = new Scene(gridPane, 1366, 768);

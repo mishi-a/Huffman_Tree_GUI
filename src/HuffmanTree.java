@@ -6,6 +6,7 @@ public class HuffmanTree
 {
 	String toEncode;
 	HuffmanTreeNode root;
+	String var;
 	
 	// constructor for the class
 	public HuffmanTree(String toEncode)

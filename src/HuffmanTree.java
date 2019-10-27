@@ -2,21 +2,18 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-public class HuffmanTree 
-{
+public class HuffmanTree {
 	String toEncode;
 	HuffmanTreeNode root;
 	String var;
 	
 	// constructor for the class
-	public HuffmanTree(String toEncode)
-	{
+	public HuffmanTree(String toEncode) {
 		this.toEncode = toEncode;
 	}
 	
 	// this creates all the leaf nodes and adds them to the min heap
-	private PriorityQueue<HuffmanTreeNode> buildHeap()
-	{
+	private PriorityQueue<HuffmanTreeNode> buildHeap() {
 		PriorityQueue<HuffmanTreeNode> minHeap = new PriorityQueue<>(toEncode.length(), new HuffmanNodeComparator());
 		
 		// getting frequencies
@@ -25,10 +22,8 @@ public class HuffmanTree
 			frequencies[(int)toEncode.charAt(i)]++;
 		
 		// creating leaf nodes and inserting them in priority queue
-		for(int i = 0;i < 65536;i++)
-		{
-			if(frequencies[i] > 0)
-			{
+		for(int i = 0;i < 65536;i++) {
+			if(frequencies[i] > 0) {
 				HuffmanTreeNode leafNode = new HuffmanTreeNode((char)i, frequencies[i]);
 				minHeap.add(leafNode);
 			}
@@ -38,12 +33,10 @@ public class HuffmanTree
 		return minHeap;
 	}
 	
-	private void buildHuffmanTree()
-	{
+	private void buildHuffmanTree() {
 		PriorityQueue<HuffmanTreeNode> minHeap = buildHeap();
 		
-		while(minHeap.size() > 1)
-		{
+		while(minHeap.size() > 1) {
 			// extract two nodes with minimum frequency
 			HuffmanTreeNode firstMin = minHeap.remove();
 			HuffmanTreeNode secondMin = minHeap.remove();
@@ -59,8 +52,7 @@ public class HuffmanTree
 		root = minHeap.remove();
 	}
 	
-	public HashMap<Character, String> getHuffmanEncoding()
-	{
+	public HashMap<Character, String> getHuffmanEncoding() {
 		// builds the huffman tree
 		buildHuffmanTree();
 		
@@ -72,11 +64,9 @@ public class HuffmanTree
 		return map;
 	}
 	
-	private void getHuffmanEncoding(HuffmanTreeNode root, String encoding, HashMap<Character, String> map)
-	{
+	private void getHuffmanEncoding(HuffmanTreeNode root, String encoding, HashMap<Character, String> map) {
 		// base condition
-		if(root.nodeToLeft == null && root.nodeToRight == null)
-		{
+		if(root.nodeToLeft == null && root.nodeToRight == null) {
 			map.put(root.character, encoding);
 			return ;
 		}
@@ -87,15 +77,13 @@ public class HuffmanTree
 	}
 	
 	// used for getting height of the tree
-	public int getHeight()
-	{
+	public int getHeight() {
 		return getHeight(root);
 	}
 	
 	// recursivve helper function
 	// returns height of the tree rooted at root
-	private int getHeight(HuffmanTreeNode root)
-	{
+	private int getHeight(HuffmanTreeNode root) {
 		if(root == null)
 			return 0;
 		
@@ -106,39 +94,33 @@ public class HuffmanTree
 	}
 }
 
-class HuffmanTreeDecoder
-{
+class HuffmanTreeDecoder {
 	HuffmanTree tree;
 	String toDecode;
 	
 	// constructor
 	// decoding requires a huffman tree and strig to decode
-	public HuffmanTreeDecoder(HuffmanTree tree, String toDecode)
-	{
+	public HuffmanTreeDecoder(HuffmanTree tree, String toDecode) {
 		this.tree = tree;
 		this.toDecode = toDecode;
 	}
 	
 	// method for decoding the string
-	public String decode()
-	{
+	public String decode() {
 		int len = toDecode.length();
 		String decoded = "";
 		
 		// contains current node of the tree which is being traversed
 		HuffmanTreeNode current = tree.root;
 		
-		for(int i = 0;i < len;i++)
-		{
+		for(int i = 0;i < len;i++) {
 			// if the leaf node is reached
-			if(current.nodeToLeft == null && current.nodeToRight == null)
-			{
+			if(current.nodeToLeft == null && current.nodeToRight == null) {
 				decoded += current.character;
 				current = tree.root;
 				i--;
 			}
-			else
-			{	
+			else {
 				// if encoding is zero go left else go right
 				if(toDecode.charAt(i) == '0')
 					current = current.nodeToLeft;
@@ -146,8 +128,7 @@ class HuffmanTreeDecoder
 					current = current.nodeToRight;
 				
 				// invalid sequence condition
-				if(i == len - 1)
-				{
+				if(i == len - 1) {
 					if(current.nodeToLeft == null && current.nodeToRight == null)
 						return (decoded + current.character);
 					else
@@ -161,19 +142,16 @@ class HuffmanTreeDecoder
 }
 
 // this class is used for defining comparison for priority queue of HuffmanTreeNode
-class HuffmanNodeComparator implements Comparator<HuffmanTreeNode>
-{
+class HuffmanNodeComparator implements Comparator<HuffmanTreeNode> {
 	@Override
-	public int compare(HuffmanTreeNode arg0, HuffmanTreeNode arg1) 
-	{
+	public int compare(HuffmanTreeNode arg0, HuffmanTreeNode arg1) {
 		return (arg0.frequency - arg1.frequency);
 	}	
 }
 
 // this is a structure of huffman tree node
 // it contains the char, its frequency and pointers to two nodes left and right
-class HuffmanTreeNode
-{
+class HuffmanTreeNode {
 	char character;
 	int frequency;
 	
@@ -181,15 +159,13 @@ class HuffmanTreeNode
 	HuffmanTreeNode nodeToRight;
 	
 	// general constructor
-	public HuffmanTreeNode(char character, int frequency)
-	{
+	public HuffmanTreeNode(char character, int frequency) {
 		this.character = character;
 		this.frequency = frequency;
 	}
 	
 	// used when this is a internal node
-	public HuffmanTreeNode(int frequency, HuffmanTreeNode nodeToLeft, HuffmanTreeNode nodeToRight)
-	{
+	public HuffmanTreeNode(int frequency, HuffmanTreeNode nodeToLeft, HuffmanTreeNode nodeToRight) {
 		this.character = '~';
 		this.frequency = frequency;
 		this.nodeToLeft = nodeToLeft;
